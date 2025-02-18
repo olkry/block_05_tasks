@@ -1,4 +1,5 @@
-#  133560522
+#  133560522 - Первая итерация, есть замечания.
+#  133598531 - Вторая итерация, проверка, замечания устранены.
 
 def encrypted_instructions(instruction: str) -> str:
     '''
@@ -12,18 +13,17 @@ def encrypted_instructions(instruction: str) -> str:
     str: Последовательную строку с командами.
     '''
     command_stack: list[tuple[int, str]] = list()
-    repeat_count: str = ''
-    result: str = ''
+    repeat_count = result = ''
+    numbers_set = {str(num) for num in range(10)}
 
     for char in instruction:
         if char.isalpha():
             result += char
-        elif char.isdigit():
+        elif char in numbers_set:
             repeat_count += char
         elif char == '[':
             command_stack.append((int(repeat_count), result))
-            repeat_count = ''
-            result = ''
+            repeat_count = result = ''
         else:
             count, previous_command = command_stack.pop()
             result = previous_command + result * count
@@ -31,8 +31,8 @@ def encrypted_instructions(instruction: str) -> str:
 
 
 if __name__ == '__main__':
-    with open('contest/input.txt', 'r') as file_in:
+    with open('input.txt', 'r') as file_in:
         from_home_instruction = file_in.readline().strip()
     result = encrypted_instructions(from_home_instruction)
-    with open('contest/output.txt', 'w') as file_out:
+    with open('output.txt', 'w') as file_out:
         file_out.write(result)
